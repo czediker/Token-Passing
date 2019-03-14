@@ -105,7 +105,8 @@ int main(int argc, char *argv[]){
 		server_addr[i].sin_port = htons(((int)_port) + 1);
 		server_addr[i].sin_addr = *((struct in_addr *)host->h_addr);
 	}
-	fclose(fp);	
+	fclose(fp);
+
 	/* Manage starting token */
 	FILE *fp2 = NULL;
 	fp2=fopen(tokens,"r");
@@ -114,6 +115,8 @@ int main(int argc, char *argv[]){
 	fprintf(fp2,"%i",0);
 	fclose(fp2);
 	printf("%i|Given token: %i\n",me,token);
+	
+	/* Branch */
 	pthread_create(&taker,NULL,takeInfo,NULL);
 	pthread_create(&tokener,NULL,recieveToken,NULL);
 
@@ -132,6 +135,7 @@ int main(int argc, char *argv[]){
 	while(1){
 		sleep(5);
 		if(somethingToSend != 0 && token != 0){
+			/* Have token and something to send */
 			printf("%i|Sending out data\n",me);
 			//Send out data
 			sendto(sock, &buffer, sizeof(buffer), 0,(struct sockaddr *)&recvserver_addr, sizeof(struct sockaddr));
@@ -141,6 +145,7 @@ int main(int argc, char *argv[]){
 	                token = 0;
         	        somethingToSend = 0;
 		}else if(token != 0){
+			/* Have token and nothing to send */
 			printf("%i|Passing off token\n",me);
                         sendto(sock, &token, sizeof(int), 0,(struct sockaddr *)&server_addr[(me+1)%num_machines], sizeof(struct sockaddr));
                         token = 0;
