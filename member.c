@@ -91,7 +91,6 @@ int main(int argc, char *argv[]){
 	/* Fetch other ring members. */
 	FILE *fp = NULL;
 	fp=fopen(machines,"r");
-	//printf("\tFetching machines\n");
 	int i = 0;
 	for(i = 0; i <num_machines;i++){
 		char _name[50];
@@ -101,7 +100,6 @@ int main(int argc, char *argv[]){
 		memcpy(linux_machines[i].name,_name, strlen(_name)+1);
 		memcpy(linux_machines[i].ip, _ip, strlen(_ip)+1);
 		linux_machines[i].port = _port;
-		//printf("\t\tNew machine named:'%s'   at:'%s'   on:'%i'\n",linux_machines[i].name,linux_machines[i].ip,linux_machines[i].port);	
 		host = (struct hostent *)gethostbyname((char *) linux_machines[i].ip);
 		server_addr[i].sin_family = AF_INET;
 		server_addr[i].sin_port = htons(((int)_port) + 1);
